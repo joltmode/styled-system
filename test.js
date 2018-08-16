@@ -651,6 +651,29 @@ test('style returns a theme value', t => {
   })
 })
 
+test('style function returns named theme values', t => {
+  const sx = style({
+    key: 'fontSizes',
+    prop: 'fontSize'
+  })
+
+  const a = sx({
+    fontSize: 'test',
+    theme: {
+      fontSizes: {
+        test: [12, 14]
+      }
+    }
+  })
+
+  t.deepEqual(a, {
+    fontSize: 12,
+    '@media screen and (min-width: 32em)': {
+      fontSize: 14
+    }
+  })
+})
+
 test('style returns a theme number value in px', t => {
   const sx = style({
     prop: 'borderRadius',
@@ -1227,6 +1250,20 @@ test('mixed returns prop-based styles', t => {
 test('mixed returns theme-based styles', t => {
   const a = mixed({ theme, bg: 'blue' })
   t.deepEqual(a, { backgroundColor: theme.colors.blue })
+})
+
+test('can use nested named scales', t => {
+  const theme = {
+    fontSizes: {
+      label: [12, 16, 20],
+      body: 1,
+      0: 12,
+      1: 14,
+      2: 16
+    }
+  }
+
+  const a =
 })
 
 Object.keys(styles).forEach(key => {

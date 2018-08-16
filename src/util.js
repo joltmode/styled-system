@@ -60,10 +60,16 @@ export const style = ({
   const css = cssProperty || prop
   const transform  = transformValue || getter || noop
   const fn = props => {
-    const val = props[prop]
+    let val = props[prop]
     if (!is(val)) return null
 
-    const scale = get(props.theme, key) || defaultScale
+    let scale = get(props.theme, key) || defaultScale
+
+    if (typeof val === 'string' && Array.isArray(scale[val])) {
+      scale = get(props.theme, key, val) || defaultScale
+      val = [...Array(scale.length).keys()]
+    }
+
     const style = n => is(n) ? ({
       [css]: transform(
         get(scale, n) || n
